@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import assert from 'assert';
-import { isMacintosh, isWindows } from '../../../../base/common/platform.js';
+import { isMacintosh } from '../../../../base/common/platform.js';
 import { flakySuite } from '../../../../base/test/common/testUtils.js';
 
 function testErrorMessage(module: string): string {
@@ -128,43 +128,4 @@ flakySuite('Native Modules (all platforms)', () => {
 	});
 });
 
-(!isWindows ? suite.skip : suite)('Native Modules (Windows)', () => {
-
-	test('@vscode/windows-mutex', async () => {
-		const mutex = await import('@vscode/windows-mutex');
-		assert.ok(mutex && typeof mutex.isActive === 'function', testErrorMessage('@vscode/windows-mutex'));
-		assert.ok(typeof mutex.isActive === 'function', testErrorMessage('@vscode/windows-mutex'));
-		assert.ok(typeof mutex.Mutex === 'function', testErrorMessage('@vscode/windows-mutex'));
-	});
-
-	test('windows-foreground-love', async () => {
-		const foregroundLove = await import('windows-foreground-love');
-		assert.ok(typeof foregroundLove.allowSetForegroundWindow === 'function', testErrorMessage('windows-foreground-love'));
-
-		const result = foregroundLove.allowSetForegroundWindow(process.pid);
-		assert.ok(typeof result === 'boolean', testErrorMessage('windows-foreground-love'));
-	});
-
-	test('@vscode/windows-process-tree', async () => {
-		const processTree = await import('@vscode/windows-process-tree');
-		assert.ok(typeof processTree.getProcessTree === 'function', testErrorMessage('@vscode/windows-process-tree'));
-
-		return new Promise((resolve, reject) => {
-			processTree.getProcessTree(process.pid, tree => {
-				if (tree) {
-					resolve();
-				} else {
-					reject(new Error(testErrorMessage('@vscode/windows-process-tree')));
-				}
-			});
-		});
-	});
-
-	test('@vscode/windows-registry', async () => {
-		const windowsRegistry = await import('@vscode/windows-registry');
-		assert.ok(typeof windowsRegistry.GetStringRegKey === 'function', testErrorMessage('@vscode/windows-registry'));
-
-		const result = windowsRegistry.GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion', 'EditionID');
-		assert.ok(typeof result === 'string' || typeof result === 'undefined', testErrorMessage('@vscode/windows-registry'));
-	});
-});
+// Windows-specific native module tests removed (macOS-only build)

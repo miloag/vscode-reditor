@@ -456,18 +456,8 @@ class CodeMain {
 		}, productService).options);
 	}
 
-	private async windowsAllowSetForegroundWindow(launchMainService: ILaunchMainService, logService: ILogService): Promise<void> {
-		if (isWindows) {
-			const processId = await launchMainService.getMainProcessId();
-
-			logService.trace('Sending some foreground love to the running instance:', processId);
-
-			try {
-				(await import('windows-foreground-love')).allowSetForegroundWindow(processId);
-			} catch (error) {
-				logService.error(error);
-			}
-		}
+	private async windowsAllowSetForegroundWindow(_launchMainService: ILaunchMainService, _logService: ILogService): Promise<void> {
+		// Windows-only functionality, not needed on macOS
 	}
 
 	private quit(accessor: ServicesAccessor, reason?: ExpectedError | Error): void {
@@ -495,19 +485,9 @@ class CodeMain {
 		lifecycleMainService.kill(exitCode);
 	}
 
-	private async checkInnoSetupMutex(productService: IProductService): Promise<boolean> {
-		if (!isWindows || !productService.win32MutexName || productService.quality !== 'insider') {
-			return false;
-		}
-
-		try {
-			const readyMutexName = `${productService.win32MutexName}setup`;
-			const mutex = await import('@vscode/windows-mutex');
-			return mutex.isActive(readyMutexName);
-		} catch (error) {
-			console.error('Failed to check Inno Setup mutex:', error);
-			return false;
-		}
+	private async checkInnoSetupMutex(_productService: IProductService): Promise<boolean> {
+		// Windows-only functionality, not needed on macOS
+		return false;
 	}
 
 	//#region Command line arguments utilities

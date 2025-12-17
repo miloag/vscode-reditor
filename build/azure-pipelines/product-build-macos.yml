@@ -68,9 +68,6 @@ extends:
         exclusionsFilePath: $(Build.SourcesDirectory)/.eslint-ignore
       sourceAnalysisPool: 1es-windows-2022-x64
       createAdoIssuesForJustificationsForDisablement: false
-    containers:
-      ubuntu-2004-arm64:
-        image: onebranch.azurecr.io/linux/ubuntu-2004-arm64:latest
     stages:
       - stage: Compile
         pool:

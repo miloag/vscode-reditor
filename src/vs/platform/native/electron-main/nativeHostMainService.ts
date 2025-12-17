@@ -1153,17 +1153,9 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 
 	//#region Registry (windows)
 
-	async windowsGetStringRegKey(windowId: number | undefined, hive: 'HKEY_CURRENT_USER' | 'HKEY_LOCAL_MACHINE' | 'HKEY_CLASSES_ROOT' | 'HKEY_USERS' | 'HKEY_CURRENT_CONFIG', path: string, name: string): Promise<string | undefined> {
-		if (!isWindows) {
-			return undefined;
-		}
-
-		const Registry = await import('@vscode/windows-registry');
-		try {
-			return Registry.GetStringRegKey(hive, path, name);
-		} catch {
-			return undefined;
-		}
+	async windowsGetStringRegKey(_windowId: number | undefined, _hive: 'HKEY_CURRENT_USER' | 'HKEY_LOCAL_MACHINE' | 'HKEY_CLASSES_ROOT' | 'HKEY_USERS' | 'HKEY_CURRENT_CONFIG', _path: string, _name: string): Promise<string | undefined> {
+		// Windows-only functionality
+		return undefined;
 	}
 
 	//#endregion

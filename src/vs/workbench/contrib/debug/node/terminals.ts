@@ -29,25 +29,17 @@ export async function hasChildProcesses(processId: number | undefined): Promise<
 	if (processId) {
 
 		// if shell has at least one child process, assume that shell is busy
-		if (platform.isWindows) {
-			const windowsProcessTree = await import('@vscode/windows-process-tree');
-			return new Promise<boolean>(resolve => {
-				windowsProcessTree.getProcessTree(processId, processTree => {
-					resolve(!!processTree && processTree.children.length > 0);
-				});
-			});
-		} else {
-			return spawnAsPromised('/usr/bin/pgrep', ['-lP', String(processId)]).then(stdout => {
-				const r = stdout.trim();
-				if (r.length === 0 || r.indexOf(' tmux') >= 0) { // ignore 'tmux'; see #43683
-					return false;
-				} else {
-					return true;
-				}
-			}, error => {
+		// macOS/Linux implementation using pgrep
+		return spawnAsPromised('/usr/bin/pgrep', ['-lP', String(processId)]).then(stdout => {
+			const r = stdout.trim();
+			if (r.length === 0 || r.indexOf(' tmux') >= 0) { // ignore 'tmux'; see #43683
+				return false;
+			} else {
 				return true;
-			});
-		}
+			}
+		}, _error => {
+			return true;
+		});
 	}
 	// fall back to safe side
 	return Promise.resolve(true);

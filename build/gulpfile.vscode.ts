@@ -498,13 +498,7 @@ function patchWin32DependenciesTask(destinationFolderName: string) {
 const buildRoot = path.dirname(root);
 
 const BUILD_TARGETS = [
-	{ platform: 'win32', arch: 'x64' },
-	{ platform: 'win32', arch: 'arm64' },
-	{ platform: 'darwin', arch: 'x64', opts: { stats: true } },
 	{ platform: 'darwin', arch: 'arm64', opts: { stats: true } },
-	{ platform: 'linux', arch: 'x64' },
-	{ platform: 'linux', arch: 'armhf' },
-	{ platform: 'linux', arch: 'arm64' },
 ];
 BUILD_TARGETS.forEach(buildTarget => {
 	const dashed = (str: string) => (str ? `-${str}` : ``);
@@ -547,6 +541,25 @@ BUILD_TARGETS.forEach(buildTarget => {
 		gulp.task(task.define('vscode-min', task.series(vscodeMin)));
 	}
 });
+
+// #region DMG
+
+/**
+ * Create a DMG file from the built macOS app
+ */
+function createDmgTask(arch: string): () => Promise<void> {
+	return async () => {
+		const { createDMG } = await import('./darwin/create-dmg.ts');
+		const appPath = path.join(buildRoot, `VSCode-darwin-${arch}`, `${product.nameLong}.app`);
+		const dmgPath = path.join(buildRoot, `VSCode-darwin-${arch}.dmg`);
+
+		await createDMG(appPath, dmgPath);
+	};
+}
+
+gulp.task(task.define('vscode-darwin-arm64-dmg', createDmgTask('arm64')));
+
+// #endregion
 
 // #region nls
 

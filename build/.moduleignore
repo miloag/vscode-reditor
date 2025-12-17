@@ -38,23 +38,6 @@ fsevents/test/**
 @vscode/sqlite3/src/**
 !@vscode/sqlite3/build/Release/*.node
 
-@vscode/windows-mutex/binding.gyp
-@vscode/windows-mutex/build/**
-@vscode/windows-mutex/src/**
-!@vscode/windows-mutex/**/*.node
-
-@vscode/windows-process-tree/binding.gyp
-@vscode/windows-process-tree/build/**
-@vscode/windows-process-tree/src/**
-@vscode/windows-process-tree/tsconfig.json
-@vscode/windows-process-tree/tslint.json
-!@vscode/windows-process-tree/**/*.node
-
-@vscode/windows-registry/binding.gyp
-@vscode/windows-registry/src/**
-@vscode/windows-registry/build/**
-!@vscode/windows-registry/build/Release/*.node
-
 @vscode/tree-sitter-wasm/wasm/tree-sitter-*.wasm
 !@vscode/tree-sitter-wasm/wasm/tree-sitter-typescript.wasm
 !@vscode/tree-sitter-wasm/wasm/tree-sitter-regex.wasm
